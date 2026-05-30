@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Savings</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:1000px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:30px;
+    padding:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+.login-box{
+    max-width:450px;
+    margin:auto;
+    text-align:center;
+}
+
+.login-box h1{
+    margin-bottom:10px;
+}
+
+.login-box p{
+    color:#cbd5e1;
+    margin-bottom:25px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    margin-bottom:15px;
+    background:#0f172a;
+    color:white;
+    font-size:16px;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    border-radius:15px;
+    padding:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.login-btn{
+    width:100%;
+    background:#4f46e5;
+    color:white;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.user{
+    color:#cbd5e1;
+}
+
+.logout-btn{
+    background:#ef4444;
+    color:white;
+    padding:10px 18px;
+}
+
+.balance-card{
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    padding:30px;
+    border-radius:25px;
+    margin-bottom:20px;
+}
+
+.balance-title{
+    opacity:.9;
+}
+
+.balance{
+    font-size:50px;
+    font-weight:700;
+    margin-top:10px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.box{
+    background:rgba(255,255,255,.05);
+    padding:20px;
+    border-radius:20px;
+}
+
+.box h3{
+    margin-bottom:15px;
+}
+
+.add-btn{
+    width:100%;
+    background:#22c55e;
+    color:white;
+}
+
+.add-btn:hover{
+    transform:translateY(-2px);
+}
+
+.history{
+    max-height:400px;
+    overflow-y:auto;
+}
+
+.item{
+    background:rgba(255,255,255,.05);
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.amount{
+    color:#22c55e;
+    font-weight:600;
+}
+
+.time{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.empty{
+    color:#94a3b8;
+    text-align:center;
+    padding:20px;
+}
+
+.stat{
+    margin-top:20px;
+    text-align:center;
+}
+
+.stat-number{
+    font-size:35px;
+    font-weight:bold;
+    color:#60a5fa;
+}
+
+@media(max-width:768px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .balance{
+        font-size:38px;
+    }
+
+    .header{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGIN -->
+    <div id="loginPage" class="card">
+
+        <div class="login-box">
+
+            <h1>💰 My Savings</h1>
+            <p>Đăng nhập bằng số điện thoại</p>
+
+            <input
+                type="text"
+                id="phone"
+                placeholder="Nhập số điện thoại"
+            >
+
+            <button
+                class="login-btn"
+                onclick="login()"
+            >
+                Đăng nhập
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- APP -->
+    <div id="app" class="card" style="display:none;">
+
+        <div class="header">
+
+            <div>
+                <h2>💎 Sổ Tiết Kiệm</h2>
+                <div class="user" id="userPhone"></div>
+            </div>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Đăng xuất
+            </button>
+
+        </div>
+
+        <div class="balance-card">
+
+            <div class="balance-title">
+                Tổng số dư
+            </div>
+
+            <div
+                class="balance"
+                id="balance"
+            >
+                0 ₫
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="box">
+
+                <h3>➕ Thêm tiền tiết kiệm</h3>
+
+                <input
+                    type="number"
+                    id="money"
+                    placeholder="Nhập số tiền"
+                >
+
+                <button
+                    class="add-btn"
+                    onclick="addMoney()"
+                >
+                    Thêm tiền
+                </button>
+
+                <div class="stat">
+
+                    <div
+                        class="stat-number"
+                        id="count"
+                    >
+                        0
+                    </div>
+
+                    <div>Lần giao dịch</div>
+
+                </div>
+
+            </div>
+
+            <div class="box">
+
+                <h3>📜 Lịch sử giao dịch</h3>
+
+                <div
+                    class="history"
+                    id="history"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let currentPhone = "";
+let balance = 0;
+let historyData = [];
+
+window.onload = function(){
+
+    let user = localStorage.getItem("currentUser");
+
+    if(user){
+
+        document.getElementById("phone").value = user;
+
+        login();
+    }
+};
+
+function login(){
+
+    const phone =
+        document.getElementById("phone")
+        .value
+        .trim();
+
+    if(phone === ""){
+
+        alert("Vui lòng nhập số điện thoại");
+        return;
+    }
+
+    currentPhone = phone;
+
+    let account =
+        JSON.parse(
+            localStorage.getItem(
+                "user_" + phone
+            )
+        );
+
+    if(!account){
+
+        account = {
+            balance:0,
+            history:[]
+        };
+    }
+
+    balance = account.balance;
+    historyData = account.history;
+
+    localStorage.setItem(
+        "currentUser",
+        phone
+    );
+
+    document.getElementById(
+        "loginPage"
+    ).style.display = "none";
+
+    document.getElementById(
+        "app"
+    ).style.display = "block";
+
+    document.getElementById(
+        "userPhone"
+    ).innerText = "SĐT: " + phone;
+
+    update();
+}
+
+function saveAccount(){
+
+    localStorage.setItem(
+        "user_" + currentPhone,
+        JSON.stringify({
+            balance: balance,
+            history: historyData
+        })
+    );
+}
+
+function addMoney(){
+
+    let money =
+        Number(
+            document.getElementById("money")
+            .value
+        );
+
+    if(
+        isNaN(money) ||
+        money <= 0
+    ){
+        alert("Số tiền không hợp lệ");
+        return;
+    }
+
+    balance += money;
+
+    historyData.unshift({
+
+        amount: money,
+
+        time:
+        new Date()
+        .toLocaleString("vi-VN")
+
+    });
+
+    saveAccount();
+
+    update();
+
+    document.getElementById(
+        "money"
+    ).value = "";
+}
+
+function update(){
+
+    document.getElementById(
+        "balance"
+    ).innerText =
+    balance.toLocaleString("vi-VN")
+    + " ₫";
+
+    document.getElementById(
+        "count"
+    ).innerText =
+    historyData.length;
+
+    let html = "";
+
+    historyData.forEach(item=>{
+
+        html += `
+        <div class="item">
+
+            <div>
+
+                <div>Tiết kiệm</div>
+
+                <div class="time">
+                    ${item.time}
+                </div>
+
+            </div>
+
+            <div class="amount">
+                +${item.amount.toLocaleString("vi-VN")} ₫
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById(
+        "history"
+    ).innerHTML =
+    html ||
+    `<div class="empty">
+        Chưa có giao dịch nào
+    </div>`;
+}
+
+function logout(){
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
+
